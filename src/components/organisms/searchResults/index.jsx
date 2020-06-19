@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'typedefs/proptypes';
 import { connect } from 'react-redux';
-import PageBackdrop from 'components/molecules/pageBackdrop';
+import PageBackdrop from 'components/atoms/pageBackdrop';
 import PageTitle from 'components/atoms/pageTitle';
 import PreviewCard from 'components/molecules/previewCard';
 import RecommendationList from 'components/organisms/recommendationList';
@@ -26,15 +26,15 @@ const SearchResults = ({
   const hasResults = searchQuery.trim().length > 1 && searchResults.length !== 0;
   return hasResults ? (
     <>
-      <PageTitle isLight>
-        { literals.results }
-      </PageTitle>
-      { searchResults.map(snippet => (
-        <PreviewCard
-          key={ `snippet_${snippet.url}` }
-          snippet={ snippet }
-        />
-      )) }
+      <PageTitle>{ literals.results }</PageTitle>
+      <ul className='search-results'>
+        { searchResults.map(snippet => (
+          <PreviewCard
+            key={ `snippet_${snippet.url}` }
+            snippet={ snippet }
+          />
+        )) }
+      </ul>
     </>
   ) : (
     <>

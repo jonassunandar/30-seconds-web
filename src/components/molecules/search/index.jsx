@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'typedefs/proptypes';
 import { connect } from 'react-redux';
-import { combineClassNames, getURLParameters, throttle, getBaseURL, getRootURL } from 'utils';
+import { getURLParameters, throttle, getBaseURL, getRootURL } from 'utils';
 import { pushNewQuery, searchByKeyphrase } from 'state/search';
-import { AnchorButton } from 'components/atoms/button';
 import literals from 'lang/en/client/search';
 
 /**
@@ -33,10 +32,6 @@ const handleHistoryUpdate = value => {
 };
 
 const propTypes = {
-  /** Additional classname(s) for the search bar */
-  className: PropTypes.string,
-  /** Element id */
-  id: PropTypes.string,
   /** Is this component the main search component? */
   isMainSearch: PropTypes.bool,
   /** Initial value for the search bar */
@@ -51,7 +46,6 @@ const propTypes = {
 
 /**
  * Search bar component. (Redux-connected)
- * Dependent on the `Anchor` component.
  * @param {bool} isMainSearch - Is this the main search? Determines the input's
  *   behavior, as it will update history and handle searching if `true`, otherwise
  *   it will act as an idle input that expects interaction to provide an entry
@@ -61,8 +55,6 @@ const propTypes = {
  * @param {string} searchTimestamp - Last search timestamp (Redux-connected)
  */
 const Search = ({
-  className = '',
-  id = '',
   searchIndex,
   searchQuery,
   isMainSearch = false,
@@ -94,9 +86,8 @@ const Search = ({
     <>
       <input
         defaultValue={ value }
-        className={ combineClassNames`search-box ${className}` }
+        className='search-box'
         type='search'
-        id={ id }
         placeholder={ literals.searchPlaceholder }
         aria-label={ literals.searchSnippets }
         onKeyUp={ e => {
@@ -119,13 +110,11 @@ const Search = ({
           }
         } }
       />
-      <AnchorButton
-        className='icon icon-search search-btn'
-        link={ {
-          url: `/search/${ value ? `?keyphrase=${encodeURIComponent(value)}` : '' }`,
-          internal: true,
-          rel: 'nofollow',
-        } }
+      <a
+        className='btn icon icon-search search-btn'
+        title={ literals.search }
+        href={ `/search/${ value ? `?keyphrase=${encodeURIComponent(value)}` : '' }` }
+        rel='nofollow'
       />
     </>
   );

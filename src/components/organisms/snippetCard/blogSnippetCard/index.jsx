@@ -2,15 +2,11 @@ import React, {Fragment} from 'react';
 import PropTypes from 'typedefs/proptypes';
 import Card from 'components/atoms/card';
 import TagList from 'components/atoms/tagList';
-import { combineClassNames } from 'utils';
-import Anchor from 'components/atoms/anchor';
 import literals from 'lang/en/client/common';
 
 const propTypes = {
   snippet: PropTypes.snippet,
-  className: PropTypes.string,
   hasGithubLinksEnabled: PropTypes.bool,
-  rest: PropTypes.any,
 };
 
 /**
@@ -20,60 +16,49 @@ const propTypes = {
  */
 const SnippetCard = ({
   snippet,
-  className,
   hasGithubLinksEnabled = false,
-  ...rest
 }) => (
-  <Card className={ combineClassNames`snippet-card ${className}` } { ...rest } >
-    <h4 className='card-title'>{ snippet.title }</h4>
+  <Card className='snippet-card' >
+    <h1 className='card-title'>{ snippet.title }</h1>
     <div className="card-meta-info">
       { snippet.authors.map((a, i, arr) => (
         <Fragment key={ `author-fragment-${i}` } >
-          <Anchor
-            key={ `author-anchor${i}` }
-            link={ {
-              internal: false,
-              url: a.profile,
-              rel: 'noopener noreferrer nofollow',
-              target: '_blank',
-            } }>
+          <a
+            href={ a.profile }
+            rel='nofollow noopener noreferrer'
+            target='_blank'
+          >
             { a.name }
-          </Anchor>
+          </a>
           { i !== arr.length - 1 ? ', ' : '' }
         </Fragment>
       )) }
       { ' · ' }
-      {
-        new Date(snippet.firstSeen).toLocaleDateString('en-US', {
-          day: 'numeric', month: 'short', year: 'numeric',
-        })
-      }
+      { new Date(snippet.firstSeen).toLocaleDateString('en-US', {
+        day: 'numeric', month: 'short', year: 'numeric',
+      }) }
       { ' · ' }
-      <TagList tags={ [ ...snippet.tags.all ] } />
+      <TagList tags={ snippet.tags.all } />
       { hasGithubLinksEnabled && (
         <>
           { ' · ' }
-          <Anchor
+          <a
             className='github-link'
-            link={ {
-              url: snippet.url,
-              internal: false,
-              target: '_blank',
-              rel: 'nofollow noopener noreferrer',
-            } }
+            href={ snippet.url }
+            rel='nofollow noopener noreferrer'
+            target='_blank'
           >
             { literals.viewOnGitHub }
-          </Anchor>
+          </a>
         </>
       ) }
     </div>
-    { snippet.cover && snippet.cover.src
-      ? <img className='card-cover-image' src={ snippet.cover.src } />
-      : null
+    { snippet.cover && snippet.cover.src &&
+      <img className='card-cover-image' src={ snippet.cover.src } />
     }
     <div
       className='card-description'
-      dangerouslySetInnerHTML={ { __html: `${snippet.html.fullDescription}` } }
+      dangerouslySetInnerHTML={ { __html: snippet.html.fullDescription } }
     />
   </Card>
 );

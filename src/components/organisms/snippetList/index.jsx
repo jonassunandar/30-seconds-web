@@ -4,8 +4,9 @@ import Paginator from 'components/molecules/paginator';
 import Sorter from 'components/molecules/sorter';
 import PageTitle from 'components/atoms/pageTitle';
 import PreviewCard from 'components/molecules/previewCard';
-import CTA from 'components/organisms/cta';
+import CTA from 'components/molecules/cta';
 import ListingAnchors from 'components/molecules/listingAnchors';
+import { insertAt } from 'utils';
 
 const propTypes = {
   snippetList: PropTypes.arrayOf(PropTypes.snippet),
@@ -40,21 +41,24 @@ const SnippetList = ({
           ? <ListingAnchors isCompact={ listingType !== 'main' } items={ listingSublinks } />
           : null
       }
-      <PageTitle isLight className='with-sorter'>
+      <PageTitle className='with-sorter'>
         { listingName }
       </PageTitle>
       <Sorter sorter={ sorter } />
-      { snippetList.reduce((l, snippet, i) => {
-        l.push(
-          <PreviewCard
-            key={ `snippet_${snippet.url}` }
-            snippet={ snippet }
-            context={ listingType }
-          />
-        );
-        if(i === ctaIndex) l.push(<CTA key="cta"/>);
-        return l;
-      }, []) }
+      <ul className='snippet-list'>
+        { insertAt(
+          ctaIndex,
+          <li key='cta' >
+            <CTA/>
+          </li>,
+          snippetList.map(snippet =>
+            <PreviewCard
+              key={ `snippet_${snippet.url}` }
+              snippet={ snippet }
+            />
+          )
+        ) }
+      </ul>
       <Paginator paginator={ paginator } />
     </>
   ) : null;

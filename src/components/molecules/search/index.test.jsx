@@ -42,29 +42,7 @@ describe('<Search />', () => {
 
   it('should render correctly', () => {
     expect(wrapper).toContainMatchingElement('input[type="search"]');
-    expect(wrapper).toContainMatchingElement('a.icon.icon-search.search-btn');
-  });
-
-  describe('with passed id and className', () => {
-    const className = 'my-search';
-    const id = 'the-search';
-
-    beforeEach(() => {
-      wrapper = mount(
-        <Provider store={ store }>
-          <Search className={ className } id={ id } />
-        </Provider>
-      );
-      input = wrapper.find('input');
-    });
-
-    it('should pass className to the input element', () => {
-      expect(input.prop('className')).toBe(`search-box ${className}`);
-    });
-
-    it('should pass id to the input element', () => {
-      expect(input.prop('id')).toBe(id);
-    });
+    expect(wrapper).toContainMatchingElement('a.btn.icon.icon-search.search-btn');
   });
 
   describe('on keyUp event', () => {

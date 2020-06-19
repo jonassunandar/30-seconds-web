@@ -3,7 +3,6 @@ import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import PreviewCard from './index';
-import literals from 'lang/en/client/common';
 import { previewSnippet, previewBlogSnippet } from 'fixtures/snippets';
 
 configure({ adapter: new Adapter() });
@@ -16,19 +15,19 @@ describe('<PreviewCard />', () => {
     wrapper = mount(
       <PreviewCard snippet={ previewSnippet } />
     );
-    anchor = wrapper.find('Anchor');
-    card = wrapper.find('Card');
+    anchor = wrapper.find('a');
+    card = wrapper.find('.card');
     expertise = wrapper.find('Expertise');
     tags = wrapper.find('TagList');
   });
 
   describe('should render', () => {
-    it('an Anchor component', () => {
-      expect(wrapper).toContainMatchingElement('Anchor');
+    it('an anchor element', () => {
+      expect(wrapper).toContainMatchingElement('a');
     });
 
-    it('a Card component', () => {
-      expect(wrapper).toContainMatchingElement('Card');
+    it('a li element with the approprite classes', () => {
+      expect(wrapper).toContainMatchingElement('li.card.preview-card');
     });
 
     it('the card title', () => {
@@ -61,7 +60,7 @@ describe('<PreviewCard />', () => {
   });
 
   it('should link to the correct url', () => {
-    expect(anchor.prop('link').url).toBe(previewSnippet.url);
+    expect(anchor.prop('href')).toBe(previewSnippet.url);
   });
 
   describe('with a blog snippet', () => {
@@ -70,8 +69,6 @@ describe('<PreviewCard />', () => {
       wrapper = mount(
         <PreviewCard snippet={ previewBlogSnippet } />
       );
-      anchor = wrapper.find('Anchor');
-      card = wrapper.find('Card');
       expertise = wrapper.find('Expertise');
       tags = wrapper.find('TagList');
     });

@@ -2,7 +2,6 @@ import createStaticPage from './createStaticPage';
 import createListingPages from './createListingPages';
 import createSnippetPages from './createSnippetPages';
 import { transformSnippetIndex } from 'build/transformers';
-import { parseListingMetas } from 'build/parsers';
 import literals from 'lang/en';
 
 /**
@@ -25,7 +24,7 @@ const createPages = (query, templates, requirables) => ({ graphql, actions }) =>
         snippetCount: searchIndex.edges.length,
       };
 
-      const listingMetas = parseListingMetas(requirables);
+      const listingMetas = requirables.map(rq => rq.meta);
 
       createStaticPage(
         templates['NotFoundPage'],
@@ -73,21 +72,14 @@ const createPages = (query, templates, requirables) => ({ graphql, actions }) =>
         '/list'
       );
 
-      const allSnippets = [
-        ...result.data.simpleSnippets.edges,
-        ...result.data.cssSnippets.edges,
-        ...result.data.blogSnippets.edges,
-      ];
-
       createSnippetPages(
         result.data.simpleSnippets.edges,
         templates['SnippetPage'],
         createPage,
         {
           ...commonContext,
-          cardTemplate: 'standard',
-        },
-        allSnippets
+          cardTemplate: 'StandardSnippetCard',
+        }
       );
 
       createSnippetPages(
@@ -96,9 +88,8 @@ const createPages = (query, templates, requirables) => ({ graphql, actions }) =>
         createPage,
         {
           ...commonContext,
-          cardTemplate: 'css',
-        },
-        allSnippets
+          cardTemplate: 'CssSnippetCard',
+        }
       );
 
       createSnippetPages(
@@ -107,9 +98,8 @@ const createPages = (query, templates, requirables) => ({ graphql, actions }) =>
         createPage,
         {
           ...commonContext,
-          cardTemplate: 'blog',
+          cardTemplate: 'BlogSnippetCard',
         },
-        allSnippets,
         result.data.images.edges
       );
 

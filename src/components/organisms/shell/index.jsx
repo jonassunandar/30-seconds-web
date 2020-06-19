@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'typedefs/proptypes';
 import { connect } from 'react-redux';
-import Anchor from 'components/atoms/anchor';
 import Search from 'components/molecules/search';
 import Footer from 'components/molecules/footer';
 import CookieConsentPopup from 'components/molecules/cookieConsentPopup';
@@ -42,32 +41,34 @@ const Shell = ({
   children,
 }) => (
   <div className={ combineClassNames`page-container ${isDarkMode ? 'dark' : ''}` }>
-    {
-      typeof acceptsCookies === 'undefined' && env === 'PRODUCTION' && !isBot ?
-        <CookieConsentPopup /> : null
-    }
-    <header className='nav-bar'>
-      <Anchor className='nav-btn' link={ { internal: true, url: '/' } } >
+    <header
+      className='nav-bar'
+      role='navigation'
+      aria-label='Main'
+    >
+      <a className='nav-btn' href='/'>
         <img
           src={ logoSrc }
           alt={ literals.home }
           className='nav-website-logo'
         />
-      </Anchor>
+      </a>
       <Search isMainSearch={ isSearch } />
-      <Anchor
+      <a
         className='nav-btn icon icon-settings'
-        link={ {
-          internal: true,
-          url: isSettings ? lastPageUrl ? lastPageUrl : '/' : '/settings',
-          rel: 'nofollow',
-        } }
+        href={ isSettings ? lastPageUrl ? lastPageUrl : '/' : '/settings' }
+        rel='nofollow'
+        title={ literals.settings }
       />
     </header>
     <div className='content'>
       { children }
       <Footer />
     </div>
+    {
+      typeof acceptsCookies === 'undefined' && env === 'PRODUCTION' && !isBot ?
+        <CookieConsentPopup /> : null
+    }
   </div>
 );
 

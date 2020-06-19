@@ -1,20 +1,16 @@
 import React from 'react';
 import PropTypes from 'typedefs/proptypes';
-import Anchor from 'components/atoms/anchor';
 import Card from 'components/atoms/card';
 import TagList from 'components/atoms/tagList';
 import Expertise from 'components/atoms/expertise';
 import CodeBlock from 'components/atoms/codeBlock';
 import { CodepenButton } from 'components/atoms/button';
 import SnippetPreview from 'components/atoms/snippetPreview';
-import { combineClassNames } from 'utils';
 import literals from 'lang/en/client/common';
 
 const propTypes = {
   snippet: PropTypes.snippet,
-  className: PropTypes.string,
   hasGithubLinksEnabled: PropTypes.bool,
-  rest: PropTypes.any,
 };
 
 /**
@@ -24,37 +20,32 @@ const propTypes = {
  */
 const SnippetCard = ({
   snippet,
-  className,
   hasGithubLinksEnabled = false,
-  ...rest
 }) => {
   return (
-    <Card className={ combineClassNames`snippet-card ${className}` } { ...rest } >
+    <Card className='snippet-card' >
       <div className='card-meta'>
         <div className={ `card-icon icon icon-${snippet.icon}` }>
           <Expertise level={ snippet.expertise } />
         </div>
         <div className='card-data'>
-          <h4 className='card-title'>{ snippet.title }</h4>
+          <h1 className='card-title'>{ snippet.title }</h1>
           <TagList tags={ [ snippet.language.long, ...snippet.tags.all ] } />
         </div>
       </div>
       { hasGithubLinksEnabled && (
-        <Anchor
+        <a
           className='github-link'
-          link={ {
-            url: snippet.url,
-            internal: false,
-            target: '_blank',
-            rel: 'nofollow noopener noreferrer',
-          } }
+          href={ snippet.url }
+          rel='nofollow noopener noreferrer'
+          target='_blank'
         >
           { literals.viewOnGitHub }
-        </Anchor>
+        </a>
       ) }
       <div
         className='card-description'
-        dangerouslySetInnerHTML={ { __html: `${snippet.html.fullDescription}` } }
+        dangerouslySetInnerHTML={ { __html: snippet.html.fullDescription } }
       />
       <div className='card-preview-content'>
         <SnippetPreview
@@ -80,11 +71,13 @@ const SnippetCard = ({
           htmlContent={ snippet.html.cssCode }
           className='card-code'
         />
-        { snippet.html.jsCode ? <CodeBlock
-          language={ {short: 'js', long: 'JavaScript'} }
-          htmlContent={ snippet.html.jsCode }
-          className='card-code'
-        /> : null }
+        { snippet.html.jsCode &&
+          <CodeBlock
+            language={ {short: 'js', long: 'JavaScript'} }
+            htmlContent={ snippet.html.jsCode }
+            className='card-code'
+          />
+        }
       </div>
     </Card>
   );

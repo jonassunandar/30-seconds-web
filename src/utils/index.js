@@ -3,8 +3,8 @@ import {
   toKebabCase,
   convertToSeoSlug,
   addTrailingSlashToSlug,
+  escapeHTML,
   stripMarkdownFormat,
-  combineClassNames,
   optimizeNodes,
   optimizeAllNodes,
   getURLParameters,
@@ -12,8 +12,11 @@ import {
   getBaseURL
 } from './string';
 
+import combineClassNames from '@chalarangelo/combine-class-names';
+
 import {
   uniqueElements,
+  insertAt,
   chunk
 } from './array';
 
@@ -27,6 +30,7 @@ export {
   convertToSeoSlug,
   addTrailingSlashToSlug,
   combineClassNames,
+  escapeHTML,
   stripMarkdownFormat,
   optimizeNodes,
   optimizeAllNodes,
@@ -35,5 +39,6 @@ export {
   getRootURL,
   throttle,
   uniqueElements,
+  insertAt,
   chunk
 };
